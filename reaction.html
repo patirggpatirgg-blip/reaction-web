@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhatsApp Channel Auto Reaction - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">  <!-- LOGIN PAGE -->  <div id="loginPage" class="bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">Login</h1>
+    <p class="text-sm text-gray-400 mb-4 text-center">Masuk untuk menggunakan fitur reaction</p><label class="block mb-2">Username</label>
+<input id="username" type="text" placeholder="Masukkan username" class="w-full p-2 rounded bg-gray-700 border border-gray-600 mb-4" />
+
+<label class="block mb-2">Password</label>
+<input id="password" type="password" placeholder="Masukkan password" class="w-full p-2 rounded bg-gray-700 border border-gray-600 mb-4" />
+
+<button onclick="login()" class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded font-semibold">
+  Login
+</button>
+
+<div id="loginStatus" class="mt-4 text-sm text-center text-red-400"></div>
+
+  </div>  <!-- MAIN APP PAGE -->  <div id="appPage" class="hidden bg-gray-800 rounded-2xl shadow-xl p-6 w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center">WhatsApp Channel Auto Reaction</h1>
+    <p class="text-sm text-gray-400 mb-4 text-center">
+      Simulasi tool untuk reaction massal ke saluran WhatsApp (hingga 900+ reaksi)
+    </p><label class="block mb-2">Link Saluran WhatsApp</label>
+<input id="channelLink" type="text" placeholder="https://whatsapp.com/channel/..." class="w-full p-2 rounded bg-gray-700 border border-gray-600 mb-4" />
+
+<label class="block mb-2">Jumlah Reaction</label>
+<input id="reactionCount" type="number" min="1" max="900" value="100" class="w-full p-2 rounded bg-gray-700 border border-gray-600 mb-4" />
+
+<label class="block mb-2">Pilih Emoji</label>
+<select id="emoji" class="w-full p-2 rounded bg-gray-700 border border-gray-600 mb-4">
+  <option value="👍">👍 Like</option>
+  <option value="❤️">❤️ Love</option>
+  <option value="😂">😂 Haha</option>
+  <option value="🔥">🔥 Fire</option>
+  <option value="👏">👏 Clap</option>
+</select>
+
+<button onclick="startReaction()" class="w-full bg-green-600 hover:bg-green-700 py-2 rounded font-semibold">
+  Mulai Reaction
+</button>
+
+<button onclick="logout()" class="w-full mt-3 bg-red-600 hover:bg-red-700 py-2 rounded font-semibold">
+  Logout
+</button>
+
+<div id="status" class="mt-4 text-sm text-center text-gray-300"></div>
+
+  </div>  <script>
+    // Akun login sederhana (bisa diubah)
+    const validUsername = "reaction by tirzz";
+    const validPassword = "patir tampan";
+
+    function login() {
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+      const status = document.getElementById('loginStatus');
+
+      if (user === validUsername && pass === validPassword) {
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('appPage').classList.remove('hidden');
+      } else {
+        status.textContent = "❌ Username atau password salah.";
+      }
+    }
+
+    function logout() {
+      document.getElementById('appPage').classList.add('hidden');
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('username').value = "";
+      document.getElementById('password').value = "";
+      document.getElementById('loginStatus').textContent = "";
+    }
+
+    function startReaction() {
+      const link = document.getElementById('channelLink').value;
+      const count = document.getElementById('reactionCount').value;
+      const emoji = document.getElementById('emoji').value;
+      const status = document.getElementById('status');
+
+      if (!link) {
+        status.textContent = '⚠️ Masukkan link saluran WhatsApp terlebih dahulu.';
+        return;
+      }
+
+      if (count < 1 || count > 900) {
+        status.textContent = '⚠️ Jumlah reaction harus antara 1 sampai 900.';
+        return;
+      }
+
+      status.innerHTML = `⏳ Mengirim <b>${count}</b> reaction ${emoji} ke saluran...`;
+
+      let sent = 0;
+      const interval = setInterval(() => {
+        sent++;
+        status.innerHTML = `🚀 Mengirim reaction: ${sent}/${count} ${emoji}`;
+        if (sent >= count) {
+          clearInterval(interval);
+          status.innerHTML = `✅ Selesai! ${count} reaction ${emoji} berhasil dikirim (simulasi).`;
+        }
+      }, 50);
+    }
+  </script></body>
+</html>
